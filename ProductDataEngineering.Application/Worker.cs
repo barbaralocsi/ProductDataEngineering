@@ -1,15 +1,10 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Pde.CodingExercise.RandomNumberGenerator;
-using ProductDataEngineering.Data;
-using ProductDataEngineering.Domain;
-using Services;
 
 namespace ProductDataEngineering.Application
 {
@@ -40,7 +35,7 @@ namespace ProductDataEngineering.Application
         private async void NumberReceivedEventHandler(object? sender, NumberGeneratedEventArgs e)
         {
             // TODO: Currently the message is not (fully) processed in case of an exception. It is possible that it was added to the database, but it was not sent to the service.
-            try 
+            try
             {
                 _logger.LogInformation($"Number received: {e.Number}");
                 using (var scope = _scopeFactory.CreateScope())

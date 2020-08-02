@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using Refit;
 
 namespace Services
 {
@@ -19,7 +14,7 @@ namespace Services
 
         public async Task SendNumberAsync(int number)
         {
-            await _beeceptorApi.SendNumberAsync(new SendNumberRequest{Number = number});
+            await _beeceptorApi.SendNumberAsync(new SendNumberRequest { Number = number });
         }
     }
 }
