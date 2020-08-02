@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Pde.CodingExercise.RandomNumberGenerator;
+using ProductDataEngineering.Data;
+using ProductDataEngineering.Domain;
 
 namespace ProductDataEngineering.Application
 {
@@ -34,6 +36,11 @@ namespace ProductDataEngineering.Application
         private void NumberReceivedEventHandler(object? sender, NumberGeneratedEventArgs e)
         {
             _logger.LogInformation($"Number received: {e.Number}");
+            using (var db = new NumberContext())
+            {
+                db.Add(new Number {Value = e.Number});
+                db.SaveChanges();
+            }
         }
 
     }
