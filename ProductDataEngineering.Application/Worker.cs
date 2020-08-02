@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Pde.CodingExercise.RandomNumberGenerator;
 using ProductDataEngineering.Data;
 using ProductDataEngineering.Domain;
+using Services;
 
 namespace ProductDataEngineering.Application
 {
@@ -36,13 +37,27 @@ namespace ProductDataEngineering.Application
             }
         }
 
-        private void NumberReceivedEventHandler(object? sender, NumberGeneratedEventArgs e)
+        private async void NumberReceivedEventHandler(object? sender, NumberGeneratedEventArgs e)
         {
-            _logger.LogInformation($"Number received: {e.Number}");
-            using (var scope = _scopeFactory.CreateScope())
+            // TODO: Currently the message is not (fully) processed in case of an exception. It is possible that it was added to the database, but it was not sent to the service.
+            try 
             {
-                var numberRepository = scope.ServiceProvider.GetRequiredService<INumberRepository>();
-                numberRepository.Add(new Number {Value = e.Number});
+                _logger.LogInformation($"Number received: {e.Number}");
+                using (var scope = _scopeFactory.CreateScope())
+                {
+                    // TODO: Move these to a separate service.
+                    var numberRepository = scope.ServiceProvider.GetRequiredService<INumberRepository>();
+                    numberRepository.Add(new Number { Value = e.Number });
+                    if (e.Number > 800)
+                    {
+                        var beeceptorService = scope.ServiceProvider.GetRequiredService<IBeeceptorService>();
+                        await beeceptorService.SendNumberAsync(e.Number);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occured during the processing of number: {e.Number}. Error: {ex}");
             }
         }
     }
