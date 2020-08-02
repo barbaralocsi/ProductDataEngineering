@@ -22,6 +22,7 @@ namespace ProductDataEngineering.Application
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddHostedService<Worker>();
+                    services.AddScoped<INumberRepository, NumberRepository>();
                     services.AddDbContext<NumberContext>(opts =>
                         opts.UseSqlite(hostContext.Configuration.GetConnectionString("Numbers")));
                 });

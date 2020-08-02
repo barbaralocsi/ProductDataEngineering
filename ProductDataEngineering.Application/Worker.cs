@@ -41,9 +41,8 @@ namespace ProductDataEngineering.Application
             _logger.LogInformation($"Number received: {e.Number}");
             using (var scope = _scopeFactory.CreateScope())
             {
-                var dbContext = scope.ServiceProvider.GetRequiredService<NumberContext>();
-                dbContext.Add(new Number {Value = e.Number});
-                dbContext.SaveChanges();
+                var numberRepository = scope.ServiceProvider.GetRequiredService<INumberRepository>();
+                numberRepository.Add(new Number {Value = e.Number});
             }
         }
     }
