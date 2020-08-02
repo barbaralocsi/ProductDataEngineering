@@ -1,0 +1,10 @@
+﻿{
+  "profiles": {
+    "ProductDataEngineering.Application": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
