@@ -39,29 +39,37 @@ namespace ProductDataEngineering.Application
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogInformation($"Could not send the number, will try again later. Exception: {ex}");
+                        _logger.LogInformation($"Could not send the number, will try again later. Details: {ex}");
                     }
                 }
 
-                await Task.Delay(1000, stoppingToken);
+                await Task.Delay(100, stoppingToken);
             }
         }
 
         private async void NumberReceivedEventHandler(object? sender, NumberGeneratedEventArgs e)
         {
-            // TODO: Currently the message is lost if an error occures while saving the number in the database.
-            try
+            _logger.LogInformation($"Number received: {e.Number}");
+            var isPersisted = false;
+
+            while (!isPersisted)
             {
-                _logger.LogInformation($"Number received: {e.Number}");
-                using (var scope = _scopeFactory.CreateScope())
+                try
                 {
-                    var numberProcessor = scope.ServiceProvider.GetRequiredService<INumberProcessor>();
-                    await numberProcessor.PersistAsync(e.Number);
+                    _logger.LogInformation($"Trying to persist number: {e.Number}");
+                    using (var scope = _scopeFactory.CreateScope())
+                    {
+                        var numberProcessor = scope.ServiceProvider.GetRequiredService<INumberProcessor>();
+                        await numberProcessor.PersistAsync(e.Number);
+                    }
+
+                    isPersisted = true;
                 }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"An error occured during the persistence of number: {e.Number}. Error: {ex}");
+                catch (Exception ex)
+                {
+                    _logger.LogInformation($"Could not persist this number: {e.Number}, will try again later. Details: {ex}");
+                    await Task.Delay(1000);
+                }
             }
         }
     }

@@ -24,8 +24,7 @@ namespace ProductDataEngineering.Application
 
                     services.AddScoped<INumberRepository, NumberRepository>();
                     services.AddDbContext<NumberContext>(opts =>
-                        opts.UseSqlite(hostContext.Configuration.GetConnectionString("Numbers"))
-                            .EnableSensitiveDataLogging());
+                        opts.UseSqlite(hostContext.Configuration.GetConnectionString("Numbers")));
 
                     services.AddRefitClient<IBeeceptorApi>().ConfigureHttpClient(c =>
                         c.BaseAddress = new Uri(hostContext.Configuration.GetSection("Beeceptor:Url").Value));
