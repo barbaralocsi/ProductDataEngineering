@@ -9,7 +9,7 @@ namespace Services
 {
     public interface IBeeceptorApi
     {
-        [Post("numbers")]
+        [Post("/numbers")]
         Task SendNumberAsync([Body] SendNumberRequest sendNumberRequest);
     }
 }

@@ -33,6 +33,8 @@ namespace ProductDataEngineering.Application
                         c.BaseAddress = new Uri(hostContext.Configuration.GetSection("Beeceptor:Url").Value));
                     services.AddScoped<IBeeceptorService, BeeceptorService>();
 
+                    services.AddScoped<INumberProcessor, NumberProcessor>();
+
                 });
     }
 }

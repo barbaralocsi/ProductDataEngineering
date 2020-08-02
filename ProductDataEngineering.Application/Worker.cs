@@ -45,14 +45,8 @@ namespace ProductDataEngineering.Application
                 _logger.LogInformation($"Number received: {e.Number}");
                 using (var scope = _scopeFactory.CreateScope())
                 {
-                    // TODO: Move these to a separate service.
-                    var numberRepository = scope.ServiceProvider.GetRequiredService<INumberRepository>();
-                    numberRepository.Add(new Number { Value = e.Number });
-                    if (e.Number > 800)
-                    {
-                        var beeceptorService = scope.ServiceProvider.GetRequiredService<IBeeceptorService>();
-                        await beeceptorService.SendNumberAsync(e.Number);
-                    }
+                    var numberProcessor = scope.ServiceProvider.GetRequiredService<INumberProcessor>();
+                    await numberProcessor.ProcessAsync(e.Number);
                 }
             }
             catch (Exception ex)
