@@ -4,6 +4,7 @@ namespace ProductDataEngineering.Application
 {
     public interface INumberProcessor
     {
-        Task ProcessAsync(int number);
+        Task PersistAsync(int number);
+        Task SendAsync();
     }
 }

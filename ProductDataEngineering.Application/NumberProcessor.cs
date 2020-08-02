@@ -17,13 +17,26 @@ namespace ProductDataEngineering.Application
             _beeceptorService = beeceptorService ?? throw new ArgumentNullException(nameof(beeceptorService));
         }
 
-        public async Task ProcessAsync(int number)
+        public async Task PersistAsync(int number)
         {
-            _numberRepository.Add(new Number { Value = number });
-            if (number > 800)
+            _numberRepository.Add(new Number
             {
-                await _beeceptorService.SendNumberAsync(number);
+                Value = number,
+                IsProcessed = Constants.Limit >= number,
+            });
+            _numberRepository.Save();
+        }
+
+        public async Task SendAsync()
+        {
+            var next = _numberRepository.GetNextUnprocessed();
+            if (next is null)
+            {
+                return;
             }
+            await _beeceptorService.SendNumberAsync(next.Value);
+            next.IsProcessed = true;
+            _numberRepository.Save();
         }
     }
 }

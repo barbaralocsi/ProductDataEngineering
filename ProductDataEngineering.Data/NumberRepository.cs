@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Linq;
+
+using System.Threading.Tasks;
 using ProductDataEngineering.Domain;
 
 namespace ProductDataEngineering.Data
@@ -15,6 +18,15 @@ namespace ProductDataEngineering.Data
         public void Add(Number number)
         {
             _numberContext.Add(number);
+        }
+
+        public Number GetNextUnprocessed()
+        {
+            return _numberContext.Numbers.FirstOrDefault(x => x.IsProcessed == false);
+        }
+
+        public void Save()
+        {
             _numberContext.SaveChanges();
         }
     }
