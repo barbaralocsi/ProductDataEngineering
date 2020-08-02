@@ -12,7 +12,8 @@ namespace ProductDataEngineering.Data
     {
         public DbSet<Number> Numbers { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseSqlite("Data Source=..//ProductDataEngineering.Data//numbers.db");
+        public NumberContext(DbContextOptions<NumberContext> options) : base(options)
+        {
+        }
     }
 }

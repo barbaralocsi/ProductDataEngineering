@@ -4,6 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ProductDataEngineering.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace ProductDataEngineering.Application
 {
@@ -19,6 +22,8 @@ namespace ProductDataEngineering.Application
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddHostedService<Worker>();
+                    services.AddDbContext<NumberContext>(opts =>
+                        opts.UseSqlite(hostContext.Configuration.GetConnectionString("Numbers")));
                 });
     }
 }
