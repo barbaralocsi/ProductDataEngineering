@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Pde.CodingExercise.RandomNumberGenerator;
 
 namespace ProductDataEngineering.Application
 {
@@ -19,11 +20,21 @@ namespace ProductDataEngineering.Application
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            var generator = new NumberGenerator();
+            generator.NumberGenerated += NumberReceivedEventHandler;
+            generator.Start();
+
             while (!stoppingToken.IsCancellationRequested)
             {
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
                 await Task.Delay(1000, stoppingToken);
             }
         }
+
+        private void NumberReceivedEventHandler(object? sender, NumberGeneratedEventArgs e)
+        {
+            _logger.LogInformation($"Number received: {e.Number}");
+        }
+
     }
 }
