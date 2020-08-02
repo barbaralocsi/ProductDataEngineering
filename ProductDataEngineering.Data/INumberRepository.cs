@@ -1,4 +1,5 @@
-﻿using ProductDataEngineering.Domain;
+﻿using System.Threading.Tasks;
+using ProductDataEngineering.Domain;
 
 namespace ProductDataEngineering.Data
 {
@@ -6,6 +7,6 @@ namespace ProductDataEngineering.Data
     {
         void Add(Number number);
         Number GetNextUnprocessed();
-        void Save();
+        Task SaveAsync();
     }
 }

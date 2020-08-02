@@ -24,7 +24,7 @@ namespace ProductDataEngineering.Application
                 Value = number,
                 IsProcessed = Constants.Limit >= number,
             });
-            _numberRepository.Save();
+            await _numberRepository.SaveAsync();
         }
 
         public async Task SendAsync()
@@ -36,7 +36,7 @@ namespace ProductDataEngineering.Application
             }
             await _beeceptorService.SendNumberAsync(next.Value);
             next.IsProcessed = true;
-            _numberRepository.Save();
+            await _numberRepository.SaveAsync();
         }
     }
 }

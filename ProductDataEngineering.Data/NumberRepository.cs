@@ -25,9 +25,9 @@ namespace ProductDataEngineering.Data
             return _numberContext.Numbers.FirstOrDefault(x => x.IsProcessed == false);
         }
 
-        public void Save()
+        public async Task SaveAsync()
         {
-            _numberContext.SaveChanges();
+            await _numberContext.SaveChangesAsync();
         }
     }
 }
